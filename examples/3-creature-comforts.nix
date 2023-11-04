@@ -55,8 +55,6 @@ vmTools.makeImageFromDebDist {
     # so that the initial userspace is capable of finding and mounting it.
     echo LABEL=root / ext4 defaults > /etc/fstab
 
-    dpkg --configure -a
-
     # actually generate an initramfs
     update-initramfs -k all -c
 

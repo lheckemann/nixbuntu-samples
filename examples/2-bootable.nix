@@ -9,6 +9,7 @@ vmTools.makeImageFromDebDist {
     "systemd" # init system
     "init-system-helpers" # satisfy undeclared dependency on update-rc.d in udev hooks
     "systemd-sysv" # provides systemd as /sbin/init
+
     "linux-image-generic" # kernel
     "initramfs-tools" # hooks for generating an initramfs
     "e2fsprogs" # initramfs wants fsck
@@ -50,8 +51,6 @@ vmTools.makeImageFromDebDist {
     # update-initramfs needs to know where its root filesystem lives,
     # so that the initial userspace is capable of finding and mounting it.
     echo LABEL=root / ext4 defaults > /etc/fstab
-
-    dpkg --configure -a
 
     # actually generate an initramfs
     update-initramfs -k all -c
