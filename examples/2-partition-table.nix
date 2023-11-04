@@ -1,4 +1,4 @@
-{ lib, vmTools, udev, gptfdisk, util-linux, dosfstools, e2fsprogs, strace }:
+{ lib, vmTools, udev, gptfdisk, util-linux, dosfstools, e2fsprogs }:
 vmTools.makeImageFromDebDist {
   inherit (vmTools.debDistros.ubuntu2004x86_64) name fullName urlPrefix packagesLists;
 
@@ -7,14 +7,12 @@ vmTools.makeImageFromDebDist {
     "sysvinit"
   ]) vmTools.debDistros.ubuntu2004x86_64.packages ++ [
     "systemd" # init system
-    "init-system-helpers" # ???
-    "systemd-sysv" # ???
-    "dbus" # ???
+    "init-system-helpers" # satisfy undeclared dependency on update-rc.d in udev hooks
+    "systemd-sysv" # provides systemd as /sbin/init
     "linux-image-generic" # kernel
-    #"linux-image-5.4.0-26-generic"
     "initramfs-tools" # hooks for generating an initramfs
-    "e2fsprogs" # for fsck
-    "grub-efi"
+    "e2fsprogs" # initramfs wants fsck
+    "grub-efi" # boot loader
   ];
 
   size = 8192;
@@ -59,6 +57,7 @@ vmTools.makeImageFromDebDist {
     update-initramfs -k all -c
 
     # Install the boot loader to the EFI System Partition
+    # Remove "quiet" from the command line so that we can see what's happening during boot
     cat >> /etc/default/grub <<EOF
     GRUB_TIMEOUT=5
     GRUB_CMDLINE_LINUX=""
