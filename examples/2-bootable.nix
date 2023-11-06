@@ -3,6 +3,9 @@ vmTools.makeImageFromDebDist {
   inherit (vmTools.debDistros.ubuntu2004x86_64) name fullName urlPrefix packagesLists;
 
   packages = lib.filter (p: !lib.elem p [
+    # Filter out these packages from the default list in nixpkgs
+    # They're included to allow building software, but we don't need them
+    # for a bootable system and they use up a fair bit of extra space and build time.
     "g++" "make" "dpkg-dev" "pkg-config"
     "sysvinit"
   ]) vmTools.debDistros.ubuntu2004x86_64.packages ++ [
