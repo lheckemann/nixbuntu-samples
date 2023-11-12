@@ -14,6 +14,7 @@ vmTools.makeImageFromDebDist {
     "e2fsprogs" # initramfs wants fsck
     "grub-efi" # boot loader
 
+    "apt" # package manager
     "ncurses-base" # terminfo to let applications talk to terminals better
     "openssh-server" # Remote login
     "dbus" # networkctl
